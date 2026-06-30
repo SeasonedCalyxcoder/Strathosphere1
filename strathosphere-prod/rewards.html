@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards - Strathosphere</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="Strathmore University Icon.png" alt="Strathmore Icon" width="52" height="52" class="me-2" style="object-fit: contain;">Strathosphere</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home"></i>Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="map.html"><i class="fas fa-map-marked-alt"></i>Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.html"><i class="fas fa-calendar-alt"></i>Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="resources.html"><i class="fas fa-book"></i>Resources</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="rewards.html"><i class="fas fa-trophy"></i>Rewards</a></li>
+                    <li class="nav-item ms-lg-3" id="nav-auth">
+                        <a href="login.html" class="btn btn-secondary"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+                    </li>
+                    <li class="nav-item ms-lg-2" id="nav-user"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: var(--primary);"><i class="fas fa-trophy me-2" style="color: var(--secondary);"></i>Engagement Rewards</h2>
+            <p class="text-muted">Earn points by participating in campus events and engaging with the community</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="points-card mb-4">
+                    <div class="text-uppercase" style="font-size: 0.875rem; opacity: 0.9;">Your Current Balance</div>
+                    <div class="points-value" id="userPoints">—</div>
+                    <div class="d-flex justify-content-center gap-2">
+                        <span class="badge bg-white text-dark"><i class="fas fa-coins me-1" style="color: var(--secondary);"></i>Engagement Points</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-history me-2" style="color: var(--primary);"></i>Recent Transactions</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="transactionsList" style="max-height: 400px; overflow-y: auto;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-crown me-2" style="color: var(--secondary);"></i>Leaderboard</h5>
+                        <span class="badge badge-soft badge-soft-warning">Top 10</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="leaderboardList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-gift me-2" style="color: var(--primary);"></i>Redeem Rewards</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded" style="background: var(--bg-light);">
+                            <div><div class="fw-bold">Cafeteria Voucher</div><small class="text-muted">Free meal at campus cafeteria</small></div>
+                            <button class="btn btn-sm btn-primary" onclick="redeem(500, 'Cafeteria Voucher')">500 pts</button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded" style="background: var(--bg-light);">
+                            <div><div class="fw-bold">Merchandise Discount</div><small class="text-muted">20% off at campus store</small></div>
+                            <button class="btn btn-sm btn-primary" onclick="redeem(300, 'Merchandise Discount')">300 pts</button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded" style="background: var(--bg-light);">
+                            <div><div class="fw-bold">Event Priority</div><small class="text-muted">Priority registration for 3 events</small></div>
+                            <button class="btn btn-sm btn-primary" onclick="redeem(1000, 'Event Priority')">1000 pts</button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded" style="background: var(--bg-light);">
+                            <div><div class="fw-bold">Certificate of Engagement</div><small class="text-muted">Official recognition for co-curricular</small></div>
+                            <button class="btn btn-sm btn-primary" onclick="redeem(2000, 'Certificate of Engagement')">2000 pts</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-info-circle me-2" style="color: var(--primary);"></i>How to Earn</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: var(--success);"></i>Attend academic events: 50-150 pts</li>
+                            <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: var(--success);"></i>Join social events: 75-100 pts</li>
+                            <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: var(--success);"></i>Career fair participation: 75 pts</li>
+                            <li><i class="fas fa-check-circle me-2" style="color: var(--success);"></i>Login streak bonus: 10 pts/day after 3 consecutive days</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        async function loadRewards() {
+            const me = await apiMe();
+            if (!me.success) {
+                document.getElementById('userPoints').textContent = '—';
+                document.getElementById('transactionsList').innerHTML = '<div class="p-3 text-center text-muted">Login to view your points</div>';
+                document.getElementById('leaderboardList').innerHTML = '<div class="p-3 text-center text-muted">Login to view leaderboard</div>';
+                return;
+            }
+
+            document.getElementById('userPoints').textContent = me.user.points || 0;
+
+            const transRes = await apiGetTransactions();
+            const transContainer = document.getElementById('transactionsList');
+            if (transRes.success && transRes.transactions.length > 0) {
+                transContainer.innerHTML = transRes.transactions.map(t => `
+                    <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px; background: ${t.type === 'earned' ? 'rgba(40,167,69,0.1)' : 'rgba(220,53,69,0.1)'};">
+                                <i class="fas ${t.type === 'earned' ? 'fa-plus' : 'fa-minus'}" style="color: ${t.type === 'earned' ? 'var(--success)' : 'var(--danger)'}; font-size: 0.75rem;"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold" style="font-size: 0.9rem;">${t.reason}</div>
+                                <small class="text-muted">${formatDate(t.created_at.split(' ')[0])}</small>
+                            </div>
+                        </div>
+                        <span class="fw-bold ${t.type === 'earned' ? 'text-success' : 'text-danger'}">${t.type === 'earned' ? '+' : ''}${t.amount} pts</span>
+                    </div>
+                `).join('');
+            } else {
+                transContainer.innerHTML = '<div class="p-3 text-center text-muted">No transactions yet. Attend events to earn points!</div>';
+            }
+
+            const lbRes = await apiGetLeaderboard();
+            const lbContainer = document.getElementById('leaderboardList');
+            if (lbRes.success && lbRes.leaderboard.length > 0) {
+                lbContainer.innerHTML = lbRes.leaderboard.map((u, idx) => `
+                    <div class="leaderboard-item">
+                        <div class="leaderboard-rank ${idx < 3 ? 'top' : ''}">${idx + 1}</div>
+                        <img src="${u.avatar}" alt="${u.name}" class="rounded-circle me-3" width="40" height="40">
+                        <div class="flex-grow-1">
+                            <div class="fw-bold" style="font-size: 0.95rem;">${u.name}</div>
+                            <small class="text-muted">${u.email}</small>
+                        </div>
+                        <div class="fw-bold" style="color: var(--secondary);">${u.points || 0} pts</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function redeem(cost, reward) {
+            const me = await apiMe();
+            if (!me.success) { window.location.href = 'login.html?redirect=rewards.html'; return; }
+            if ((me.user.points || 0) < cost) { showToast(`Not enough points! Need ${cost}.`, 'warning'); return; }
+            const res = await apiRedeem(cost, reward);
+            if (res.success) {
+                showToast(`Redeemed ${reward}!`, 'success');
+                await updateNavUser();
+                loadRewards();
+            } else {
+                showToast(res.message, 'danger');
+            }
+        }
+
+        loadRewards();
+    </script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Map - Strathosphere</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="Strathmore University Icon.png" alt="Strathmore Icon" width="52" height="52" class="me-2" style="object-fit: contain;">Strathosphere</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home"></i>Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="map.html"><i class="fas fa-map-marked-alt"></i>Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.html"><i class="fas fa-calendar-alt"></i>Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="resources.html"><i class="fas fa-book"></i>Resources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="rewards.html"><i class="fas fa-trophy"></i>Rewards</a></li>
+                    <li class="nav-item ms-lg-3" id="nav-auth">
+                        <a href="login.html" class="btn btn-secondary"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+                    </li>
+                    <li class="nav-item ms-lg-2" id="nav-user"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+        <div class="row g-4">
+            <div class="col-lg-3">
+                <div class="map-sidebar">
+                    <h4 class="fw-bold mb-3" style="color: var(--primary);"><i class="fas fa-search-location me-2"></i>Find Locations</h4>
+                    <div class="search-box mb-3">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="form-control" id="locationSearch" placeholder="Search buildings, halls...">
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted fw-bold text-uppercase">Categories</small>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="badge badge-soft badge-soft-primary category-filter active" data-cat="all">All</span>
+                            <span class="badge badge-soft badge-soft-info category-filter" data-cat="academic">Academic</span>
+                            <span class="badge badge-soft badge-soft-success category-filter" data-cat="dining">Dining</span>
+                            <span class="badge badge-soft badge-soft-warning category-filter" data-cat="sports">Sports</span>
+                            <span class="badge badge-soft badge-soft-danger category-filter" data-cat="events">Events</span>
+                            <span class="badge badge-soft badge-soft-primary category-filter" data-cat="services">Services</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted fw-bold text-uppercase">Directions</small>
+                        <div class="mt-2">
+                            <select class="form-select form-select-sm mb-2" id="fromLocation"><option value="">From: Select starting point</option></select>
+                            <select class="form-select form-select-sm mb-2" id="toLocation"><option value="">To: Select destination</option></select>
+                            <button class="btn btn-primary btn-sm w-100" id="getDirections" disabled><i class="fas fa-directions me-1"></i>Get Directions</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="locationsList" style="max-height: 40vh; overflow-y: auto;"></div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card h-100">
+                    <div class="card-body p-0">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editLocationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-map-pin me-2"></i>Edit Map Tag</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editLocationForm">
+                        <input type="hidden" id="editLocId">
+                        <div class="row g-3">
+                            <div class="col-md-7">
+                                <label class="form-label">Tag Name</label>
+                                <input type="text" class="form-control" id="editLocName" required>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" id="editLocCategory" required>
+                                    <option value="academic">Academic</option>
+                                    <option value="dining">Dining</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="events">Events</option>
+                                    <option value="religious">Religious</option>
+                                    <option value="services">Services</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Latitude</label>
+                                <input type="number" step="0.00000001" class="form-control" id="editLocLat" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Longitude</label>
+                                <input type="number" step="0.00000001" class="form-control" id="editLocLng" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="editLocDesc" rows="3" required></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveLocationBtn"><i class="fas fa-save me-2"></i>Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        const map = L.map('map').setView([-1.3095, 36.8145], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        function createIcon(color, icon) {
+            return L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="background: ${color}; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"><i class="fas ${icon}" style="font-size: 14px;"></i></div>`,
+                iconSize: [36, 36], iconAnchor: [18, 18]
+            });
+        }
+
+        const categoryColors = { academic: '#002855', dining: '#e67e22', sports: '#27ae60', events: '#8e44ad', religious: '#c0392b', services: '#7f8c8d' };
+        const categoryIcons = { academic: 'fa-building', dining: 'fa-utensils', sports: 'fa-dumbbell', events: 'fa-theater-masks', religious: 'fa-church', services: 'fa-parking' };
+        let markers = {}, routeLine = null;
+        let currentLocations = [];
+        let isAdminUser = false;
+
+        async function detectAdmin() {
+            const me = await apiMe();
+            isAdminUser = !!(me.success && me.user.role === 'admin');
+        }
+
+        async function openEditLocation(locationId) {
+            if (!isAdminUser) return;
+            const loc = currentLocations.find(l => Number(l.id) === Number(locationId));
+            if (!loc) return;
+
+            document.getElementById('editLocId').value = loc.id;
+            document.getElementById('editLocName').value = loc.name || '';
+            document.getElementById('editLocCategory').value = loc.category || 'academic';
+            document.getElementById('editLocLat').value = loc.lat;
+            document.getElementById('editLocLng').value = loc.lng;
+            document.getElementById('editLocDesc').value = loc.description || '';
+
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('editLocationModal')).show();
+        }
+
+        window.openEditLocation = openEditLocation;
+
+        async function loadLocations(filter = 'all', search = '') {
+            const res = await apiGetLocations(filter, search);
+            if (!res.success) return;
+            const locations = res.locations;
+            currentLocations = locations;
+            const listContainer = document.getElementById('locationsList');
+            listContainer.innerHTML = '';
+            Object.values(markers).forEach(m => map.removeLayer(m));
+            markers = {};
+
+            locations.forEach(loc => {
+                const color = categoryColors[loc.category] || '#002855';
+                const icon = categoryIcons[loc.category] || 'fa-map-marker-alt';
+                const marker = L.marker([loc.lat, loc.lng], { icon: createIcon(color, icon) }).addTo(map);
+                const adminEditButton = isAdminUser
+                    ? `<br><button class="popup-btn" onclick="openEditLocation(${loc.id})"><i class='fas fa-pen me-1'></i>Edit Tag</button>`
+                    : '';
+                marker.bindPopup(`<div class="popup-title">${loc.name}</div><div class="popup-desc">${loc.description}</div><span class="badge badge-soft badge-soft-primary">${loc.category}</span><br><br><a href="events.html?location_id=${loc.id}" class="popup-btn">View Events</a>${adminEditButton}`);
+                markers[loc.id] = marker;
+
+                const item = document.createElement('div');
+                item.className = 'location-item';
+                item.innerHTML = `<div class="d-flex align-items-center"><div style="width: 32px; height: 32px; border-radius: 50%; background: ${color}; display: flex; align-items: center; justify-content: center; color: white; margin-right: 0.75rem; flex-shrink: 0;"><i class="fas ${icon}" style="font-size: 12px;"></i></div><div><h5>${loc.name}</h5><p>${loc.description}</p><span class="badge badge-soft badge-soft-primary">${loc.category}</span></div></div>`;
+                item.addEventListener('click', () => {
+                    map.setView([loc.lat, loc.lng], 18);
+                    marker.openPopup();
+                    document.querySelectorAll('.location-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                });
+                listContainer.appendChild(item);
+            });
+            updateDropdowns(locations);
+        }
+
+        function updateDropdowns(locations) {
+            const fromSel = document.getElementById('fromLocation');
+            const toSel = document.getElementById('toLocation');
+            const currentFrom = fromSel.value, currentTo = toSel.value;
+            fromSel.innerHTML = '<option value="">From: Select starting point</option>';
+            toSel.innerHTML = '<option value="">To: Select destination</option>';
+            locations.forEach(loc => {
+                fromSel.innerHTML += `<option value="${loc.id}">${loc.name}</option>`;
+                toSel.innerHTML += `<option value="${loc.id}">${loc.name}</option>`;
+            });
+            fromSel.value = currentFrom; toSel.value = currentTo;
+        }
+
+        document.querySelectorAll('.category-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-filter').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                loadLocations(btn.dataset.cat, document.getElementById('locationSearch').value);
+            });
+        });
+
+        document.getElementById('locationSearch').addEventListener('input', (e) => {
+            const activeCat = document.querySelector('.category-filter.active').dataset.cat;
+            loadLocations(activeCat, e.target.value);
+        });
+
+        const fromSel = document.getElementById('fromLocation');
+        const toSel = document.getElementById('toLocation');
+        const dirBtn = document.getElementById('getDirections');
+        function checkDirections() { dirBtn.disabled = !(fromSel.value && toSel.value && fromSel.value !== toSel.value); }
+        fromSel.addEventListener('change', checkDirections);
+        toSel.addEventListener('change', checkDirections);
+
+        dirBtn.addEventListener('click', async () => {
+            const res1 = await apiGetLocation(fromSel.value);
+            const res2 = await apiGetLocation(toSel.value);
+            if (!res1.success || !res2.success) return;
+            const from = res1.location, to = res2.location;
+            if (routeLine) map.removeLayer(routeLine);
+            routeLine = L.polyline([[from.lat, from.lng], [to.lat, to.lng]], { color: '#C9A227', weight: 4, opacity: 0.8, dashArray: '10, 10' }).addTo(map);
+            map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+            const dist = map.distance([from.lat, from.lng], [to.lat, to.lng]);
+            const time = Math.ceil(dist / 80);
+            showToast(`Route: ${from.name} → ${to.name}. ~${Math.round(dist)}m, ~${time} min walk`, 'info');
+        });
+
+        document.getElementById('saveLocationBtn').addEventListener('click', async () => {
+            if (!isAdminUser) return;
+
+            const id = parseInt(document.getElementById('editLocId').value, 10);
+            const name = document.getElementById('editLocName').value.trim();
+            const category = document.getElementById('editLocCategory').value;
+            const lat = document.getElementById('editLocLat').value;
+            const lng = document.getElementById('editLocLng').value;
+            const description = document.getElementById('editLocDesc').value.trim();
+
+            if (!id || !name || !category || !lat || !lng || !description) {
+                showToast('Please complete all tag fields.', 'warning');
+                return;
+            }
+
+            const result = await apiUpdateLocation({ id, name, category, lat, lng, description, icon: categoryIcons[category] || 'fa-map-marker-alt' });
+            if (result.success) {
+                showToast('Map tag updated successfully.', 'success');
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('editLocationModal')).hide();
+                const activeCat = document.querySelector('.category-filter.active').dataset.cat;
+                await loadLocations(activeCat, document.getElementById('locationSearch').value);
+            } else {
+                showToast(result.message || 'Failed to update map tag.', 'danger');
+            }
+        });
+
+        (async () => {
+            await detectAdmin();
+            await loadLocations();
+        })();
+    </script>
+</body>
+</html>

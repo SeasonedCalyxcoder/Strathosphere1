@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Strathosphere</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="Strathmore University Icon.png" alt="Strathmore Icon" width="52" height="52" class="me-2" style="object-fit: contain;">Strathosphere</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="admin.html">Admin</a></li>
+                    <li class="nav-item ms-lg-2" id="nav-user"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <h2 class="fw-bold mb-4" style="color: var(--primary);"><i class="fas fa-cog me-2" style="color: var(--secondary);"></i>Admin Dashboard</h2>
+        
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card success">
+                    <div class="stat-value" id="totalEvents">0</div>
+                    <div class="stat-label">Active Events</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card warning">
+                    <div class="stat-value" id="totalTickets">0</div>
+                    <div class="stat-label">Tickets Issued</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card info">
+                    <div class="stat-value" id="totalPoints">0</div>
+                    <div class="stat-label">Points Awarded</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card table-container">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">User Management</h5>
+                <input type="text" class="form-control form-control-sm w-auto" id="userSearch" placeholder="Search users...">
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr><th>Name</th><th>Email</th><th>Status</th><th>Account Type</th><th>Points</th><th>Joined</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        async function loadAdmin() {
+            const me = await apiMe();
+            if (!me.success || me.user.role !== 'admin') {
+                document.body.innerHTML = '<div class="text-center py-5"><h3>Access Denied</h3><a href="index.html" class="btn btn-primary">Go Home</a></div>';
+                return;
+            }
+
+            window.currentAdminId = me.user.id;
+
+            const statsRes = await apiGetAdminStats();
+            if (statsRes.success) {
+                const s = statsRes.stats;
+                document.getElementById('totalUsers').textContent = s.total_users;
+                document.getElementById('totalEvents').textContent = s.total_events;
+                document.getElementById('totalTickets').textContent = s.total_tickets;
+                document.getElementById('totalPoints').textContent = s.total_points;
+            }
+
+            const usersRes = await apiGetAdminUsers();
+            if (usersRes.success) renderUsers(usersRes.users);
+
+            document.getElementById('userSearch').addEventListener('input', async (e) => {
+                const res = await apiGetAdminUsers(e.target.value);
+                if (res.success) renderUsers(res.users);
+            });
+        }
+
+        function renderUsers(users) {
+            document.getElementById('usersTable').innerHTML = users.map(u => `
+                <tr>
+                    <td><div class="d-flex align-items-center"><img src="${u.avatar}" class="rounded-circle me-2" width="32" height="32">${u.name}</div></td>
+                    <td>${u.email}</td>
+                    <td><span class="badge badge-soft badge-soft-${u.status === 'approved' ? 'success' : (u.status === 'pending' ? 'warning' : 'danger')}">${u.status}</span></td>
+                    <td>
+                        <select class="form-select form-select-sm user-role-select" onchange="changeUserRole(${u.id}, this.value)" ${(u.id === window.currentAdminId || u.status !== 'approved') ? 'disabled' : ''}>
+                            <option value="student" ${u.role === 'student' ? 'selected' : ''}>Student</option>
+                            <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
+                        </select>
+                    </td>
+                    <td><strong>${u.points || 0}</strong></td>
+                    <td>${formatDate(u.created_at.split(' ')[0])}</td>
+                    <td>
+                        ${u.status === 'pending' ? `
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-success" onclick="reviewUser(${u.id}, 'approve')"><i class="fas fa-check me-1"></i>Approve</button>
+                                <button class="btn btn-sm btn-outline-warning" onclick="reviewUser(${u.id}, 'reject')"><i class="fas fa-ban me-1"></i>Reject</button>
+                            </div>
+                        ` : `
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${u.id})" ${u.id === window.currentAdminId ? 'disabled' : ''}>
+                                <i class="fas fa-trash-alt me-1"></i>Delete
+                            </button>
+                        `}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function reviewUser(userId, decision) {
+            const actionLabel = decision === 'approve' ? 'approve' : 'reject';
+            const confirmed = confirm(`Are you sure you want to ${actionLabel} this account request?`);
+            if (!confirmed) return;
+
+            const result = await apiAdminReviewUser(userId, decision);
+            if (!result.success) {
+                showToast(result.message || 'Unable to review request.', 'danger');
+            } else {
+                showToast(result.message || 'Request updated.');
+            }
+
+            const usersRes = await apiGetAdminUsers(document.getElementById('userSearch').value || '');
+            if (usersRes.success) renderUsers(usersRes.users);
+        }
+
+        async function changeUserRole(userId, role) {
+            const result = await apiAdminUpdateUserRole(userId, role);
+            if (!result.success) {
+                showToast(result.message || 'Unable to update account type.', 'danger');
+            } else {
+                showToast(result.message || 'Account type updated.');
+            }
+
+            const usersRes = await apiGetAdminUsers(document.getElementById('userSearch').value || '');
+            if (usersRes.success) renderUsers(usersRes.users);
+        }
+
+        async function deleteUser(userId) {
+            const confirmed = confirm('Are you sure you want to delete this account? This action cannot be undone.');
+            if (!confirmed) return;
+
+            const result = await apiAdminDeleteUser(userId);
+            if (!result.success) {
+                showToast(result.message || 'Unable to delete user.', 'danger');
+            } else {
+                showToast(result.message || 'User account deleted.');
+            }
+
+            const usersRes = await apiGetAdminUsers(document.getElementById('userSearch').value || '');
+            if (usersRes.success) renderUsers(usersRes.users);
+        }
+
+        loadAdmin();
+    </script>
+</body>
+</html>

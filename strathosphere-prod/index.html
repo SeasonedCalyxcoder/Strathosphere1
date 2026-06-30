@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strathosphere - Campus Navigation & Events | Strathmore University</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="Strathmore University Icon.png" alt="Strathmore Icon" width="52" height="52" class="me-2" style="object-fit: contain;">
+                Strathosphere
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fas fa-home"></i>Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="map.html"><i class="fas fa-map-marked-alt"></i>Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.html"><i class="fas fa-calendar-alt"></i>Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="resources.html"><i class="fas fa-book"></i>Resources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="rewards.html"><i class="fas fa-trophy"></i>Rewards</a></li>
+                    <li class="nav-item ms-lg-3" id="nav-auth">
+                        <a href="login.html" class="btn btn-secondary"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+                    </li>
+                    <li class="nav-item ms-lg-2" id="nav-user"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-slides" aria-hidden="true">
+            <div class="hero-slide active" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/f/fc/An_aerial_view_of_Strathmore-University_Keri_campus.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Strathmore-University-Management-science-building.jpg/3840px-Strathmore-University-Management-science-building.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Strathmore-University.jpg/3840px-Strathmore-University.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Strathmore_University_Library_by_night.jpg/3840px-Strathmore_University_Library_by_night.jpg');"></div>
+            <div class="hero-slide" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Strathmore_University_Student_Centre.jpg/3840px-Strathmore_University_Student_Centre.jpg');"></div>
+        </div>
+        <button class="hero-nav hero-nav-prev" id="heroPrev" type="button" aria-label="Previous hero image">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="hero-nav hero-nav-next" id="heroNext" type="button" aria-label="Next hero image">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <h1>Navigate. Discover. Engage.</h1>
+                    <p class="lead">The all-in-one platform for Strathmore University campus navigation, event discovery, and student engagement.</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="map.html" class="btn btn-secondary btn-lg"><i class="fas fa-map-marked-alt me-2"></i>Explore Campus</a>
+                        <a href="events.html" class="btn btn-outline-light btn-lg"><i class="fas fa-calendar-alt me-2"></i>Browse Events</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat"><div class="hero-stat-value">10+</div><div class="hero-stat-label">Campus Locations</div></div>
+                        <div class="hero-stat"><div class="hero-stat-value">50+</div><div class="hero-stat-label">Monthly Events</div></div>
+                        <div class="hero-stat"><div class="hero-stat-value">500+</div><div class="hero-stat-label">Active Students</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold" style="color: var(--primary);">Everything You Need for Campus Life</h2>
+                <p class="text-muted">Integrated services designed specifically for the Strathmore community</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100">
+                        <div class="feature-icon"><i class="fas fa-map-marked-alt"></i></div>
+                        <h3>Campus Navigation</h3>
+                        <p class="text-muted">Interactive maps with real-time directions to lecture halls, offices, dining, and event venues.</p>
+                        <a href="map.html" class="btn btn-sm btn-primary mt-auto">Open Map <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100">
+                        <div class="feature-icon" style="background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);"><i class="fas fa-calendar-days" style="color: #856404;"></i></div>
+                        <h3>Event Discovery</h3>
+                        <p class="text-muted">Discover academic, social, and career events. RSVP, get tickets, and receive reminders.</p>
+                        <a href="events.html" class="btn btn-sm btn-primary mt-auto">Find Events <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100">
+                        <div class="feature-icon" style="background: linear-gradient(135deg, #d1ecf1 0%, #a8d8ea 100%);"><i class="fas fa-book" style="color: #0c5460;"></i></div>
+                        <h3>Resource Hub</h3>
+                        <p class="text-muted">Access student handbooks, academic calendars, policies, and campus guides.</p>
+                        <a href="resources.html" class="btn btn-sm btn-primary mt-auto">Access Resources <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card h-100">
+                        <div class="feature-icon" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);"><i class="fas fa-trophy" style="color: #155724;"></i></div>
+                        <h3>Rewards System</h3>
+                        <p class="text-muted">Earn points for attending events and engaging with campus life. Climb the leaderboard.</p>
+                        <a href="rewards.html" class="btn btn-sm btn-primary mt-auto">View Rewards <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="fw-bold mb-4" style="color: var(--primary);">Stay Connected with Campus Life</h2>
+                    <div id="announcements-list"></div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-body p-4">
+                            <h4 class="fw-bold mb-3" style="color: var(--primary);"><i class="fas fa-bullhorn me-2" style="color: var(--secondary);"></i>Latest Updates</h4>
+                            <div id="latest-events-preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5" style="background: linear-gradient(135deg, var(--accent) 0%, #d4edda 100%);">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-3" style="color: var(--primary);">Ready to Explore?</h2>
+            <p class="lead text-muted mb-4">Join thousands of Strathmore students already using Strathosphere</p>
+            <a href="login.html" class="btn btn-primary btn-lg"><i class="fas fa-user-plus me-2"></i>Get Started</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5><img src="Strathmore University Icon.png" alt="Strathmore Icon" width="40" height="40" class="me-2" style="object-fit: contain;">Strathosphere</h5>
+                    <p>Web-Based Campus Navigation and Events Discovery System for Strathmore University.</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="map.html">Campus Map</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="rewards.html">Rewards</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact IT</a></li>
+                        <li><a href="#">Report Issue</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <h5>Strathmore University</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i>Ole Sangale Road, Madaraka, Nairobi</p>
+                    <p><i class="fas fa-envelope me-2"></i>info@strathmore.edu</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Strathosphere. Strathmore University.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        function initHeroSlideshow() {
+            const slides = Array.from(document.querySelectorAll('.hero-slide'));
+            const prevButton = document.getElementById('heroPrev');
+            const nextButton = document.getElementById('heroNext');
+
+            if (slides.length === 0 || !prevButton || !nextButton) return;
+
+            let currentIndex = 0;
+            let timerId;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+                currentIndex = index;
+            }
+
+            function move(direction) {
+                const nextIndex = (currentIndex + direction + slides.length) % slides.length;
+                showSlide(nextIndex);
+                restartAutoplay();
+            }
+
+            function startAutoplay() {
+                timerId = setInterval(() => {
+                    const nextIndex = (currentIndex + 1) % slides.length;
+                    showSlide(nextIndex);
+                }, 5000);
+            }
+
+            function restartAutoplay() {
+                clearInterval(timerId);
+                startAutoplay();
+            }
+
+            prevButton.addEventListener('click', () => move(-1));
+            nextButton.addEventListener('click', () => move(1));
+            prevButton.addEventListener('mouseenter', () => move(-1));
+            nextButton.addEventListener('mouseenter', () => move(1));
+
+            showSlide(0);
+            startAutoplay();
+        }
+
+        async function loadHomeData() {
+            const eventsRes = await apiGetEvents('all', '', 'date');
+            if (eventsRes.success) {
+                const events = eventsRes.events.slice(0, 3);
+                const container = document.getElementById('latest-events-preview');
+                container.innerHTML = events.map(evt => `
+                    <div class="d-flex align-items-center mb-3 pb-3" style="border-bottom: 1px solid var(--border);">
+                        <img src="${evt.image}" alt="${evt.title}" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
+                        <div class="ms-3 flex-grow-1">
+                            <h6 class="fw-bold mb-1" style="color: var(--primary);">${evt.title}</h6>
+                            <div class="small text-muted">
+                                <i class="far fa-calendar me-1"></i>${formatDate(evt.event_date)}
+                                <span class="mx-2">|</span>
+                                <i class="fas fa-map-marker-alt me-1"></i>${evt.location_name || 'TBA'}
+                            </div>
+                        </div>
+                        <a href="events.html" class="btn btn-sm btn-outline-primary">View</a>
+                    </div>
+                `).join('');
+            }
+        }
+        initHeroSlideshow();
+        loadHomeData();
+    </script>
+</body>
+</html>

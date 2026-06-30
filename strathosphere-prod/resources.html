@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources - Strathosphere</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="Strathmore University Icon.png" alt="Strathmore Icon" width="52" height="52" class="me-2" style="object-fit: contain;">Strathosphere</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home"></i>Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="map.html"><i class="fas fa-map-marked-alt"></i>Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.html"><i class="fas fa-calendar-alt"></i>Events</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="resources.html"><i class="fas fa-book"></i>Resources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="rewards.html"><i class="fas fa-trophy"></i>Rewards</a></li>
+                    <li class="nav-item ms-lg-3" id="nav-auth">
+                        <a href="login.html" class="btn btn-secondary"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+                    </li>
+                    <li class="nav-item ms-lg-2" id="nav-user"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <div>
+                <h2 class="fw-bold mb-1" style="color: var(--primary);"><i class="fas fa-book me-2" style="color: var(--secondary);"></i>Resource Repository</h2>
+                <p class="text-muted mb-0">Access institutional documents, guides, and policies</p>
+            </div>
+            <button class="btn btn-outline-primary admin-only d-none" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                <i class="fas fa-upload me-2"></i>Upload Document
+            </button>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" class="form-control" id="docSearch" placeholder="Search documents...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="docCategory">
+                            <option value="all">All Categories</option>
+                            <option value="policy">Policies</option>
+                            <option value="academic">Academic</option>
+                            <option value="guide">Guides</option>
+                            <option value="map">Maps</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="docSort">
+                            <option value="date">Newest First</option>
+                            <option value="downloads">Most Downloaded</option>
+                            <option value="name">Name A-Z</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3" id="documentsList"></div>
+    </div>
+
+    <div class="modal fade" id="uploadModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--primary); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-upload me-2"></i>Upload Document</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadForm">
+                        <div class="mb-3">
+                            <label class="form-label">Document Title</label>
+                            <input type="text" class="form-control" id="docTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" id="docCat">
+                                <option value="policy">Policy</option>
+                                <option value="academic">Academic</option>
+                                <option value="guide">Guide</option>
+                                <option value="map">Map</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveDocBtn"><i class="fas fa-save me-2"></i>Save Document</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        async function renderDocs() {
+            const container = document.getElementById('documentsList');
+            const search = document.getElementById('docSearch').value;
+            const category = document.getElementById('docCategory').value;
+            const sort = document.getElementById('docSort').value;
+            const res = await apiGetDocuments(category, search, sort);
+            if (!res.success) return;
+            const docs = res.documents;
+            container.innerHTML = docs.map(doc => `
+                <div class="col-12">
+                    <div class="card doc-card">
+                        <div class="doc-icon ${doc.file_type}"><i class="fas fa-file-${doc.file_type === 'pdf' ? 'pdf' : 'alt'}"></i></div>
+                        <div class="doc-info">
+                            <h5>${doc.title}</h5>
+                            <div class="doc-meta">
+                                <span class="badge badge-soft badge-soft-primary">${doc.category}</span>
+                                <span class="ms-2"><i class="fas fa-hdd me-1"></i>${doc.file_size}</span>
+                                <span class="ms-2"><i class="fas fa-download me-1"></i>${doc.downloads} downloads</span>
+                                <span class="ms-2"><i class="far fa-calendar me-1"></i>${formatDate(doc.created_at)}</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="downloadDoc(${doc.id})"><i class="fas fa-download me-1"></i>Download</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function downloadDoc(id) {
+            const res = await apiDownloadDocument(id);
+            if (res.success) { showToast('Download started', 'success'); renderDocs(); }
+        }
+
+        document.getElementById('saveDocBtn').addEventListener('click', async () => {
+            const title = document.getElementById('docTitle').value;
+            const cat = document.getElementById('docCat').value;
+            if (!title) return;
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('category', cat);
+            const res = await apiUploadDocument(formData);
+            if (res.success) {
+                showToast('Document uploaded!', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('uploadModal')).hide();
+                document.getElementById('uploadForm').reset();
+                renderDocs();
+            }
+        });
+
+        document.getElementById('docSearch').addEventListener('input', renderDocs);
+        document.getElementById('docCategory').addEventListener('change', renderDocs);
+        document.getElementById('docSort').addEventListener('change', renderDocs);
+        renderDocs();
+    </script>
+</body>
+</html>

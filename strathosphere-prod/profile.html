@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Strathosphere</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="Strathmore University Icon.png" alt="Strathmore Icon" width="52" height="52" class="me-2" style="object-fit: contain;">Strathosphere</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="map.html">Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.html">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="resources.html">Resources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="rewards.html">Rewards</a></li>
+                    <li class="nav-item ms-lg-2" id="nav-user"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
+                    <img id="profileAvatar" src="" alt="Profile" class="profile-avatar">
+                </div>
+                <div class="col-md-9 text-center text-md-start">
+                    <h2 class="fw-bold mb-1" id="profileName">Loading...</h2>
+                    <p class="mb-2" id="profileEmail">...</p>
+                    <div class="d-flex gap-2 justify-content-center justify-content-md-start">
+                        <span class="badge bg-white text-dark" id="profileRole">...</span>
+                        <span class="badge" style="background: var(--secondary); color: var(--primary-dark);" id="profilePoints">...</span>
+                        <span class="badge" style="background: #fff3cd; color: #8a5a00;" id="profileStreak"><i class="fas fa-fire me-1"></i>0 days</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-user-edit me-2" style="color: var(--primary);"></i>Edit Profile</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="profileForm">
+                            <div class="mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="editName" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="editEmail" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">+254</span>
+                                    <input type="tel" class="form-control" id="editPhoneLocal" placeholder="7XXXXXXXX" maxlength="9" inputmode="numeric">
+                                </div>
+                                <small class="text-muted">Use 9 digits after +254.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Profile Picture</label>
+                                <input type="file" class="form-control" id="editAvatar" accept="image/*">
+                                <small class="text-muted">Upload JPG, PNG, or WEBP (max 3MB).</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-save me-2"></i>Update Profile</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-ticket-alt me-2" style="color: var(--primary);"></i>My Event Tickets</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="ticketsList"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-chart-line me-2" style="color: var(--primary);"></i>Engagement Stats</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3 text-center">
+                            <div class="col-4">
+                                <div class="p-3 rounded" style="background: var(--accent);">
+                                    <div class="h3 fw-bold mb-1" style="color: var(--primary);" id="statEvents">0</div>
+                                    <small class="text-muted">Events Attended</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 rounded" style="background: rgba(201,162,39,0.1);">
+                                    <div class="h3 fw-bold mb-1" style="color: var(--secondary);" id="statPoints">0</div>
+                                    <small class="text-muted">Total Points</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 rounded" style="background: rgba(40,167,69,0.1);">
+                                    <div class="h3 fw-bold mb-1" style="color: var(--success);" id="statRank">—</div>
+                                    <small class="text-muted">Leaderboard Rank</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-key me-2" style="color: var(--primary);"></i>Change Password</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="passwordForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Current Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" id="currentPassword" required>
+                                            <button class="btn btn-outline-secondary" type="button" id="toggleCurrentPassword" aria-label="Show current password">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">New Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" id="newPassword" minlength="6" required>
+                                            <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword" aria-label="Show new password">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Confirm New Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" id="confirmNewPassword" minlength="6" required>
+                                            <button class="btn btn-outline-secondary" type="button" id="toggleConfirmNewPassword" aria-label="Show confirm password">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary w-100"><i class="fas fa-lock me-2"></i>Change Password</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card h-100 border-danger">
+                            <div class="card-header" style="background: rgba(220,53,69,0.08);">
+                                <h5 class="mb-0 text-danger"><i class="fas fa-user-times me-2"></i>Danger Zone</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted mb-3">Delete your account permanently. This action cannot be undone.</p>
+                                <form id="deleteAccountForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Current Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" id="deleteCurrentPassword" required>
+                                            <button class="btn btn-outline-secondary" type="button" id="toggleDeleteCurrentPassword" aria-label="Show delete password">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-danger w-100"><i class="fas fa-trash-alt me-2"></i>Delete My Account</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let initialPhoneLocal = '';
+
+        function sanitizeLocalPhoneInput(value) {
+            return (value || '').replace(/\D/g, '').slice(0, 9);
+        }
+
+        function toLocalPhone(phone) {
+            const normalized = (phone || '').replace(/\s+|-/g, '');
+            if (/^\+254\d{9}$/.test(normalized)) return normalized.slice(4);
+            if (/^254\d{9}$/.test(normalized)) return normalized.slice(3);
+            if (/^0\d{9}$/.test(normalized)) return normalized.slice(1);
+            if (/^\d{9}$/.test(normalized)) return normalized;
+            return '';
+        }
+
+        function isValidLocalPhone(localDigits) {
+            return /^\d{9}$/.test(sanitizeLocalPhoneInput(localDigits));
+        }
+
+        function setupPasswordToggle(toggleButtonId, inputId) {
+            const toggleButton = document.getElementById(toggleButtonId);
+            const input = document.getElementById(inputId);
+            if (!toggleButton || !input) return;
+
+            toggleButton.addEventListener('click', function() {
+                const hidden = input.type === 'password';
+                input.type = hidden ? 'text' : 'password';
+                this.innerHTML = `<i class="fas ${hidden ? 'fa-eye-slash' : 'fa-eye'}"></i>`;
+            });
+        }
+
+        setupPasswordToggle('toggleCurrentPassword', 'currentPassword');
+        setupPasswordToggle('toggleNewPassword', 'newPassword');
+        setupPasswordToggle('toggleConfirmNewPassword', 'confirmNewPassword');
+        setupPasswordToggle('toggleDeleteCurrentPassword', 'deleteCurrentPassword');
+
+        const editPhoneLocalInput = document.getElementById('editPhoneLocal');
+        editPhoneLocalInput.addEventListener('input', function() {
+            this.value = sanitizeLocalPhoneInput(this.value);
+        });
+
+        async function loadProfile() {
+            const me = await apiMe();
+            if (!me.success) {
+                document.body.innerHTML = '<div class="text-center py-5"><h3>Please login to view your profile</h3><a href="login.html" class="btn btn-primary">Login</a></div>';
+                return;
+            }
+
+            const user = me.user;
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileEmail').textContent = user.email;
+            document.getElementById('profileRole').textContent = user.role === 'admin' ? 'Administrator' : 'Student';
+            document.getElementById('profilePoints').textContent = (user.points || 0) + ' Points';
+            document.getElementById('profileStreak').innerHTML = `<i class="fas fa-fire me-1"></i>${user.login_streak || 0} days`;
+            document.getElementById('profileAvatar').src = user.avatar;
+            document.getElementById('editName').value = user.name;
+            document.getElementById('editEmail').value = user.email;
+            initialPhoneLocal = toLocalPhone(user.phone_number || '');
+            document.getElementById('editPhoneLocal').value = initialPhoneLocal;
+            document.getElementById('editAvatar').value = '';
+
+            const myEvents = await apiMyEvents();
+            const ticketsContainer = document.getElementById('ticketsList');
+            if (myEvents.success && myEvents.events.length > 0) {
+                ticketsContainer.innerHTML = myEvents.events.map(evt => `
+                    <div class="ticket mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="fw-bold mb-1" style="color: var(--primary);">${evt.title}</h5>
+                                <div class="small text-muted mb-2">
+                                    <i class="far fa-calendar me-1"></i>${formatDate(evt.event_date)} at ${formatTime(evt.event_time)}
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <span class="badge badge-soft badge-soft-primary">${evt.category}</span>
+                                    <span class="badge badge-soft badge-soft-success">Registered</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                <div class="ticket-qr ms-md-auto"><i class="fas fa-qrcode"></i></div>
+                                <small class="text-muted d-block mt-1">Digital Ticket</small>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                ticketsContainer.innerHTML = '<div class="text-center py-4 text-muted">No tickets yet. <a href="events.html">Browse events</a> to register.</div>';
+            }
+
+            const lb = await apiGetLeaderboard();
+            let rank = '—';
+            if (lb.success) {
+                const idx = lb.leaderboard.findIndex(u => u.email === user.email);
+                if (idx >= 0) rank = '#' + (idx + 1);
+            }
+            const allEvents = await apiMyEvents();
+            document.getElementById('statEvents').textContent = allEvents.success ? allEvents.events.length : 0;
+            document.getElementById('statPoints').textContent = user.points || 0;
+            document.getElementById('statRank').textContent = rank;
+        }
+
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const avatarFile = document.getElementById('editAvatar').files[0];
+            const currentPhoneLocal = sanitizeLocalPhoneInput(document.getElementById('editPhoneLocal').value);
+            const phoneChanged = currentPhoneLocal !== initialPhoneLocal;
+
+            if (!avatarFile && !phoneChanged) {
+                showToast('No changes detected. Update your phone or choose a profile picture first.', 'warning');
+                return;
+            }
+
+            if (phoneChanged && !isValidLocalPhone(currentPhoneLocal)) {
+                showToast('Enter a valid phone number (9 digits after +254).', 'danger');
+                return;
+            }
+
+            const formData = new FormData();
+            if (avatarFile) {
+                formData.append('avatar', avatarFile);
+            }
+            if (phoneChanged) {
+                formData.append('phone_number', `+254${currentPhoneLocal}`);
+            }
+
+            const res = await apiUpdateProfile(formData);
+            if (res.success) {
+                if (res.avatar) {
+                    document.getElementById('profileAvatar').src = res.avatar;
+                }
+                if (res.phone_number) {
+                    initialPhoneLocal = toLocalPhone(res.phone_number);
+                    document.getElementById('editPhoneLocal').value = initialPhoneLocal;
+                }
+                showToast('Profile updated!', 'success');
+                await updateNavUser();
+                loadProfile();
+            } else {
+                showToast(res.message || 'Unable to update profile.', 'danger');
+            }
+        });
+
+        document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+            if (newPassword !== confirmNewPassword) {
+                showToast('New password and confirmation do not match.', 'danger');
+                return;
+            }
+
+            const res = await apiChangePassword(currentPassword, newPassword);
+            if (res.success) {
+                showToast(res.message || 'Password changed successfully.', 'success');
+                document.getElementById('passwordForm').reset();
+            } else {
+                showToast(res.message || 'Unable to change password.', 'danger');
+            }
+        });
+
+        document.getElementById('deleteAccountForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('deleteCurrentPassword').value;
+            const confirmDelete = confirm('Are you sure you want to permanently delete your account?');
+            if (!confirmDelete) return;
+
+            const res = await apiDeleteMyAccount(currentPassword);
+            if (res.success) {
+                showToast(res.message || 'Account deleted.', 'success');
+                setTimeout(() => window.location.href = 'login.html', 1000);
+            } else {
+                showToast(res.message || 'Unable to delete account.', 'danger');
+            }
+        });
+
+        loadProfile();
+    </script>
+</body>
+</html>
